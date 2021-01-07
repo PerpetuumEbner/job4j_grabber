@@ -5,9 +5,7 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Properties;
 
 import static org.quartz.JobBuilder.*;
@@ -73,6 +71,13 @@ public class AlertRabbit {
             System.out.println("Rabbit runs here ...");
             Connection connection = (Connection) context.getJobDetail().getJobDataMap().get("connection");
             System.out.println(connection);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(
+                    "INSERT INTO rabbit.public.rabbit (created) VALUES (?);")) {
+                preparedStatement.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+                preparedStatement.executeUpdate();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
 }
