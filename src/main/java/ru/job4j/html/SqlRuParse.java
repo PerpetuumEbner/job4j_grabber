@@ -23,7 +23,7 @@ public class SqlRuParse {
                 String date = td.parent().child(5).text();
                 System.out.println(href.attr("href"));
                 System.out.println(href.text());
-                System.out.println(date);
+                System.out.println(ParseDateFormat.parseDateTime(date));
                 System.out.println();
                 amount++;
             }
