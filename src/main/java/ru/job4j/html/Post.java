@@ -1,17 +1,22 @@
 package ru.job4j.html;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Post {
     private String title;
     private String url;
     private String description;
-    private Timestamp date;
+    private LocalDateTime date;
 
-    public Post(String title, String url, String description, Timestamp date) {
+    public Post(String title, String url, LocalDateTime date) {
         this.title = title;
         this.url = url;
+        this.date = date;
+    }
+
+    public Post(String description, LocalDateTime date) {
         this.description = description;
         this.date = date;
     }
@@ -40,11 +45,11 @@ public class Post {
         this.description = description;
     }
 
-    public Timestamp getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
