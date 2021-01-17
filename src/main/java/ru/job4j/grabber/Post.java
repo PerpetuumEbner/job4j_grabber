@@ -1,21 +1,29 @@
 package ru.job4j.grabber;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.Objects;
 
-public class Post {
+public class Post  {
     private String title;
     private String url;
     private String description;
-    private LocalDateTime date;
+    private Timestamp date;
+    private String id;
 
-    public Post(String title, String url, LocalDateTime date) {
+    public Post(String title, String description, String url, Timestamp date) {
+        this.title = title;
+        this.description = description;
+        this.url = url;
+        this.date = date;
+    }
+
+    public Post(String title, String url, Timestamp date) {
         this.title = title;
         this.url = url;
         this.date = date;
     }
 
-    public Post(String description, LocalDateTime date) {
+    public Post(String description, Timestamp date) {
         this.description = description;
         this.date = date;
     }
@@ -44,12 +52,20 @@ public class Post {
         this.description = description;
     }
 
-    public LocalDateTime getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(Timestamp date) {
         this.date = date;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

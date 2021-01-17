@@ -8,6 +8,8 @@ import ru.job4j.grabber.Parse;
 import ru.job4j.grabber.Post;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +31,13 @@ public class SqlRuParse implements Parse {
                 for (int i = 3; i < row.size(); i++) {
                     Element td = row.get(i);
                     Element href = td.child(0);
-                    Element date = td.parent().child(5);
+                    Element elementDate = td.parent().child(5);
                     String link = href.attr("href");
                     String title = href.text();
-                    list.add(new Post(title, link, ParseDateFormat.parseDateTime(date.text())));
-                    System.out.println(String.format("%s %s %s", title + lineSeparator(), link + lineSeparator(), date.text()));
+                    LocalDateTime localDateTime = ParseDateFormat.parseDateTime(elementDate.text());
+                    Timestamp timestamp = Timestamp.valueOf(localDateTime);
+                    list.add(new Post(title, link, timestamp));
+                    System.out.println(String.format("%s %s %s", title + lineSeparator(), link + lineSeparator(), elementDate.text()));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -49,7 +53,9 @@ public class SqlRuParse implements Parse {
             Document doc = Jsoup.connect(url).get();
             String body = doc.select(".msgBody").get(1).text();
             String date = doc.select(".msgFooter").get(0).text().split("\\[", 2)[0];
-            post = new Post(body, ParseDateFormat.parseDateTime(date));
+            LocalDateTime localDateTime = ParseDateFormat.parseDateTime(date);
+            Timestamp timestamp = Timestamp.valueOf(localDateTime);
+            post = new Post(body, timestamp);
             System.out.println(String.format("%s %s", body + lineSeparator(), date));
 
         } catch (IOException e) {
