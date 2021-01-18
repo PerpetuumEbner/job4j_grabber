@@ -54,7 +54,8 @@ public class PsqlStoreTest {
             Post post = new Post("title", "description", "url", Timestamp.valueOf(LocalDateTime.now()));
             store.save(post);
             postList.add(post);
-            List<Post> result = store.getAll();
+            List<Post> result = new ArrayList<>();
+            result.add((Post) store.getAll());
             assertEquals(postList, result);
         } catch (Exception e) {
             e.printStackTrace();
