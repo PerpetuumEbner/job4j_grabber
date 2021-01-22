@@ -27,7 +27,7 @@ public class PsqlStore implements Store, AutoCloseable {
     @Override
     public void save(Post post) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "INSERT INTO post.public.post (name, description, link, created) VALUES (?), (?), (?), (?)", Statement.RETURN_GENERATED_KEYS)) {
+                "INSERT INTO post.public.post (name, description, link, created) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, post.getTitle());
             preparedStatement.setString(2, post.getDescription());
             preparedStatement.setString(3, post.getUrl());
@@ -46,14 +46,14 @@ public class PsqlStore implements Store, AutoCloseable {
     public List<Post> getAll() {
         List<Post> list = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "SELECT  * FROM post.public.post")) {
+                "SELECT * FROM post.public.post")) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 list.add(new Post(
                         resultSet.getString("name"),
                         resultSet.getString("description"),
-                        resultSet.getString("url"),
-                        resultSet.getTimestamp("timestamp")));
+                        resultSet.getString("link"),
+                        resultSet.getTimestamp("created")));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -72,8 +72,8 @@ public class PsqlStore implements Store, AutoCloseable {
                 post = new Post(
                         resultSet.getString("name"),
                         resultSet.getString("description"),
-                        resultSet.getString("url"),
-                        resultSet.getTimestamp("timestamp"));
+                        resultSet.getString("link"),
+                        resultSet.getTimestamp("created"));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();

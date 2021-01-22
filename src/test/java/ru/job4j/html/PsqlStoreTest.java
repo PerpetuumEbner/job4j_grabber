@@ -35,7 +35,8 @@ public class PsqlStoreTest {
     @Test
     public void whenCreatePost() {
         try (PsqlStore store = new PsqlStore(ConnectionRollback.create(this.init()))) {
-            Post post = new Post("title", "description", "url", Timestamp.valueOf(LocalDateTime.now()));
+            LocalDateTime localDateTime = LocalDateTime.now();
+            Post post = new Post("title", "description", "url", Timestamp.valueOf(localDateTime.withNano(0)));
             store.save(post);
             Post result = store.findById(post.getId());
             assertEquals(post.getTitle(), result.getTitle());
