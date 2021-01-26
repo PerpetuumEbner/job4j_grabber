@@ -10,10 +10,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class PsqlStoreTest {
@@ -50,14 +50,14 @@ public class PsqlStoreTest {
 
     @Test
     public void whenAllItemsPost() {
-        List<Post> postList = new ArrayList<>();
         try (PsqlStore store = new PsqlStore(ConnectionRollback.create(this.init()))) {
-            Post post = new Post("title", "description", "url", Timestamp.valueOf(LocalDateTime.now()));
+            Post post = new Post("title", "description", "url", Timestamp.valueOf(LocalDateTime.now().withNano(0)));
             store.save(post);
-            postList.add(post);
-            List<Post> result = new ArrayList<>();
-            result.add((Post) store.getAll());
-            assertEquals(postList, result);
+            Post result = store.findById(post.getId());
+            assertThat(result.getTitle(), is("title"));
+            assertThat(result.getDescription(), is("description"));
+            assertThat(result.getUrl(), is("url"));
+            assertThat(result.getDate(), is(Timestamp.valueOf(LocalDateTime.now().withNano(0))));
         } catch (Exception e) {
             e.printStackTrace();
         }
