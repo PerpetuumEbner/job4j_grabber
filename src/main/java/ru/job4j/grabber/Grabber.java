@@ -55,10 +55,14 @@ public class Grabber implements Grab {
         public void execute(JobExecutionContext context) throws JobExecutionException {
             JobDataMap map = context.getJobDetail().getJobDataMap();
             Store store = (Store) map.get("store");
-            Parse parse = (Parse) map.get("store");
+            Parse parse = (Parse) map.get("parse");
+            List<Post> posts = store.getAll();
             List<Post> postList = parse.list("https://www.sql.ru/forum/job-offers/");
-            postList.forEach(store::save);
-            System.out.println(postList);
+            for (Post post : postList) {
+                if (!posts.contains(post)) {
+                    store.save(post);
+                }
+            }
         }
     }
 
