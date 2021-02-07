@@ -58,14 +58,9 @@ public class Grabber implements Grab {
             JobDataMap map = context.getJobDetail().getJobDataMap();
             Store store = (Store) map.get("store");
             Parse parse = (Parse) map.get("parse");
-            List<Post> posts = store.getAll();
             List<Post> postList = parse.list("https://www.sql.ru/forum/job-offers/");
-            for (Post post : postList) {
-                if (!posts.contains(post)) {
-                    store.save(post);
-                }
+            postList.forEach(store::save);
             }
-        }
     }
 
     public void web(Store store) {
