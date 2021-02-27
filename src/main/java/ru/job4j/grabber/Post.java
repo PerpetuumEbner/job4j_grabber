@@ -87,4 +87,9 @@ public class Post  {
     public int hashCode() {
         return Objects.hash(title, url, description, date);
     }
+
+    @Override
+    public String toString() {
+        return String.format("title: %s, url: %s, date: %s", title, url, date);
+    }
 }
