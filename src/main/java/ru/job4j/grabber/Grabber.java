@@ -7,7 +7,6 @@ import ru.job4j.html.SqlRuParse;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Properties;
 
@@ -71,7 +70,7 @@ public class Grabber implements Grab {
                     Socket socket = server.accept();
                     try (PrintWriter out = new PrintWriter(
                             new BufferedWriter(new OutputStreamWriter(
-                                    socket.getOutputStream(), StandardCharsets.UTF_8)), true)) {
+                                    socket.getOutputStream(), "windows-1251")), true)) {
                         out.write("HTTP/1.1 200 OK\r\n\r\n");
                         for (Post post : store.getAll()) {
                             out.write(post.toString());
